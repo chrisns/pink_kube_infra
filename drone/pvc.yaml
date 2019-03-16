@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: drone
+  namespace: drone
+spec:
+  capacity:
+    storage: 1Gi
+  storageClassName: drone
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    server: 192.168.0.3
+    path: /volume2/cluster-store/drone
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: drone
+  namespace: drone
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: drone
+  resources:
+    requests:
+      storage: 1Gi
