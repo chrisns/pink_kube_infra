@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: etcd-backup
+  namespace: kube-system
+spec:
+  capacity:
+    storage: 1Gi
+  storageClassName: etcd-backup
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    server: 192.168.0.3
+    path: /volume2/cluster-store/etcd-backup
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: etcd-backup
+  namespace: kube-system
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: etcd-backup
+  resources:
+    requests:
+      storage: 1Gi
