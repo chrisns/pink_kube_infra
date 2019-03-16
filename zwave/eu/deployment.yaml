@@ -1,0 +1,20 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: zwave
+spec:
+  selector:
+    matchLabels:
+      name: zwave-eu
+  template:
+    metadata:
+      labels:
+        name: zwave-eu
+    spec:
+      containers:
+      - name: zwave-eu
+        env:
+          - name: BUCKET_KEY
+            value: pink_eu
+      nodeSelector:
+        kubernetes.io/hostname: stick1

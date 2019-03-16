@@ -1,0 +1,69 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: zwave
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: zwave
+  template:
+    metadata:
+      labels:
+        name: zwave
+    spec:
+      containers:
+      - image: chrisns/iot-zwave
+        name: zwave
+        volumeMounts:
+        - mountPath: /dev/ttyUSB1
+          name: zwavestick
+        - mountPath: /data
+          name: data
+        securityContext:
+          allowPrivilegeEscalation: true
+          privileged: true
+        env:
+          - name: ZWAVE_NETWORK_KEY
+            valueFrom:
+              secretKeyRef:
+                name: zwave
+                key: ZWAVE_NETWORK_KEY
+          - name: DEVICE
+            value: /dev/ttyUSB1
+          - name: DEBUG
+            value: "true"
+          - name: BUCKET
+            valueFrom:
+              secretKeyRef:
+                name: zwave
+                key: BUCKET
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: zwave
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: zwave
+                key: AWS_SECRET_ACCESS_KEY
+          - name: AWS_IOT_ENDPOINT_HOST
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_IOT_ENDPOINT_HOST
+          - name: AWS_REGION
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_REGION
+      restartPolicy: Always
+      volumes:
+      - name: zwavestick
+        hostPath:
+          path: /dev/ttyACM0
+          type: File
+      - name: data
+        persistentVolumeClaim:
+          claimName: zwave

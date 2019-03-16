@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: zwave
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: zwave-usa
+  resources:
+    requests:
+      storage: 1Gi

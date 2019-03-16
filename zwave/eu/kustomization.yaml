@@ -1,0 +1,17 @@
+nameSuffix: -eu
+bases:
+ - ../base
+
+secretGenerator:
+- name: zwave
+  behavior: merge
+  env: env.txt
+  type: Opaque
+
+patches:
+ - pvc.yaml
+ - pv.yaml
+ - deployment.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
