@@ -5,7 +5,7 @@ metadata:
 spec:
   accessModes:
   - ReadWriteMany
-  storageClassName: zwave-usa
+  storageClassName: nfs
   resources:
     requests:
       storage: 1Gi

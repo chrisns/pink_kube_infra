@@ -5,12 +5,12 @@ bases:
 secretGenerator:
 - name: zwave
   behavior: merge
+  namespace: zwave
   env: env.txt
   type: Opaque
 
 patches:
  - pvc.yaml
- - pv.yaml
  - deployment.yaml
 
 generatorOptions:

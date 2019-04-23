@@ -1,4 +1,4 @@
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: Namespace
 metadata:
   name: zwave

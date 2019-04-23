@@ -2,5 +2,3 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: zwave
-spec:
-  storageClassName: zwave-usa

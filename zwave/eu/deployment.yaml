@@ -3,16 +3,10 @@ apiVersion: extensions/v1beta1
 metadata:
   name: zwave
 spec:
-  selector:
-    matchLabels:
-      name: zwave-eu
   template:
-    metadata:
-      labels:
-        name: zwave-eu
     spec:
       containers:
-      - name: zwave-eu
+      - name: zwave
         env:
           - name: BUCKET_KEY
             value: pink_eu

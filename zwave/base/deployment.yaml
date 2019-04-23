@@ -51,12 +51,12 @@ spec:
           - name: AWS_IOT_ENDPOINT_HOST
             valueFrom:
               secretKeyRef:
-                name: aws-iot-creds
+                name: zwave
                 key: AWS_IOT_ENDPOINT_HOST
           - name: AWS_REGION
             valueFrom:
               secretKeyRef:
-                name: aws-iot-creds
+                name: zwave
                 key: AWS_REGION
       restartPolicy: Always
       volumes:
