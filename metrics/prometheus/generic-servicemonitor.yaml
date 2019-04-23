@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: http-metrics
+  labels:
+    release: prometheus-operator
+spec:
+  jobLabel: http-metrics
+  selector:
+    matchExpressions:
+    - {key: metrics, operator: Exists}
+  namespaceSelector:
+    matchNames:
+    - metrics
+  endpoints:
+  - port: http-metrics
+    interval: 15s
