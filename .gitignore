@@ -1,2 +1,4 @@
 env.txt
 *.secret.txt
+*secret.yaml
+secret.yaml
