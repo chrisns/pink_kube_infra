@@ -1,0 +1,54 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - grafana/pvc.yaml
+  - grafana/deployment.yaml
+  - grafana/service.yaml
+  # - influxdb/pvc.yaml
+  # - influxdb/deployment.yaml
+  # - influxdb/service.yaml
+  - telegraf/deployment.yaml
+  - telegraf/service.yaml
+  - prometheus/generic-servicemonitor.yaml
+  - ingress.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: telegraf
+    namespace: metrics
+    files:
+      - telegraf/telegraf.conf
+  - name: telegraf-mibs
+    namespace: metrics
+    files:
+      - telegraf/MIBS/FROGFOOT-RESOURCES-MIB
+      - telegraf/MIBS/UBNT-MIB
+      - telegraf/MIBS/UBNT-UniFi-MIB
+      - telegraf/MIBS/SYNOLOGY-COREDUMPS-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-DISK-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-EBOX-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-FLASHCACHE-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-ISCSILUN-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-NFS-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-RAID-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-SERVICES-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-SMART-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-SPACEIO-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-STORAGEIO-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-SYSTEM-MIB.txt
+      - telegraf/MIBS/SYNOLOGY-UPS-MIB.txt
+
+secretGenerator:
+  - name: telegraf
+    namespace: metrics
+    type: Opaque
+    files:
+      - telegraf/ca.pem
+      - telegraf/04ebb46fc1-certificate.pem.crt
+      - telegraf/04ebb46fc1-private.pem.key
+
+namespace: metrics
