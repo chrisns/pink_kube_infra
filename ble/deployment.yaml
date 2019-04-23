@@ -1,0 +1,45 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: ble-eq3
+  labels:
+    name: ble-eq3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: ble-eq3
+  template:
+    metadata:
+      labels:
+        name: ble-eq3
+    spec:
+      hostNetwork: true
+      containers:
+      - image: chrisns/ble-eq3-awsiot
+        name: ble-eq3
+        imagePullPolicy: Always
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_SECRET_ACCESS_KEY
+          - name: AWS_IOT_ENDPOINT_HOST
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_IOT_ENDPOINT_HOST
+          - name: AWS_REGION
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_REGION
+      restartPolicy: Always
+      nodeSelector:
+        kubernetes.io/hostname: stick4
