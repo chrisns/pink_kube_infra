@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: telegraf-metrics
+  labels:
+    metrics: telegraf
+spec:
+  ports:
+  - name: http-metrics
+    port: 9273
+    protocol: TCP
+    targetPort: http-metrics
+  selector:
+    name: telegraf

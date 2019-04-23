@@ -1,0 +1,55 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: telegraf
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: telegraf
+  template:
+    metadata:
+      labels:
+        name: telegraf
+    spec:
+      containers:
+      - image: telegraf:alpine
+        name: telegraf
+        ports:
+         - name: http-metrics
+           containerPort: 9273
+        volumeMounts:
+        - mountPath: /etc/telegraf/telegraf.conf
+          name: config
+          subPath: telegraf.conf
+          readOnly: true
+
+        - mountPath: /root/.snmp/mibs
+          name: mibs
+          readOnly: true
+
+        - mountPath: /etc/telegraf/ca.pem
+          name: secrets
+          subPath: ca.pem
+          readOnly: true
+        - mountPath: /etc/telegraf/cert.pem
+          name: secrets
+          subPath: 04ebb46fc1-certificate.pem.crt
+          readOnly: true
+        - mountPath: /etc/telegraf/key.pem
+          name: secrets
+          subPath: 04ebb46fc1-private.pem.key
+          readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: config
+          configMap:
+            name: telegraf
+        - name: mibs
+          configMap:
+            name: telegraf-mibs
+        - name: secrets
+          secret:
+            secretName: telegraf
