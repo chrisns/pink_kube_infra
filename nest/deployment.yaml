@@ -1,0 +1,71 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: nest-aws-iot
+  labels:
+    name: nest-aws-iot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: nest-aws-iot
+  template:
+    metadata:
+      labels:
+        name: nest-aws-iot
+    spec:
+      containers:
+      - image: chrisns/nest-aws-iot
+        name: nest-aws-iot
+        imagePullPolicy: Always
+        env:
+          - name: ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: nest
+                key: ACCESS_TOKEN
+          - name: DEVICE_ID
+            valueFrom:
+              secretKeyRef:
+                name: nest
+                key: DEVICE_ID
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_SECRET_ACCESS_KEY
+          - name: AWS_IOT_ENDPOINT_HOST
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_IOT_ENDPOINT_HOST
+          - name: AWS_REGION
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_REGION
+        # livenessProbe:
+        #   httpGet:
+        #     path: /ping
+        #     port: 80
+        #   initialDelaySeconds: 3
+        #   periodSeconds: 3
+        #   timeoutSeconds: 1
+      # affinity:
+      #   podAntiAffinity:
+      #     preferredDuringSchedulingIgnoredDuringExecution:
+      #     - weight: 100
+      #       podAffinityTerm:
+      #         labelSelector:
+      #           matchExpressions:
+      #           - key: role
+      #             operator: In
+      #             values:
+      #             - data
+      #         topologyKey: kubernetes.io/hostname
+      restartPolicy: Always
