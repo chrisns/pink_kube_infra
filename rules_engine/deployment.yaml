@@ -1,0 +1,59 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: rules-engine
+  labels:
+    name: rules-engine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: rules-engine
+  template:
+    metadata:
+      labels:
+        name: rules-engine
+    spec:
+      containers:
+      - image: pinked/rules_engine:b3c866aaca33aaeadf58561d632491afef015376
+        name: rules-engine
+        imagePullPolicy: Always
+        securityContext:
+          readOnlyRootFilesystem: true
+        env:
+          - name: CHRIS_TELEGRAM_ID
+            valueFrom:
+              configMapKeyRef:
+                name: rules-engine
+                key: CHRIS_TELEGRAM_ID
+          - name: GROUP_TELEGRAM_ID
+            valueFrom:
+              configMapKeyRef:
+                name: rules-engine
+                key: GROUP_TELEGRAM_ID                
+          - name: HANNAH_TELEGRAM_ID
+            valueFrom:
+              configMapKeyRef:
+                name: rules-engine
+                key: HANNAH_TELEGRAM_ID
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_SECRET_ACCESS_KEY
+          - name: AWS_IOT_ENDPOINT_HOST
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_IOT_ENDPOINT_HOST
+          - name: AWS_REGION
+            valueFrom:
+              secretKeyRef:
+                name: aws-iot-creds
+                key: AWS_REGION
+      restartPolicy: Always

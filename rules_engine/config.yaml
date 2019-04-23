@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rules-engine
+data:
+  CHRIS_TELEGRAM_ID: "478001324"
+  GROUP_TELEGRAM_ID: "-185107748"
+  HANNAH_TELEGRAM_ID: "402333089"
