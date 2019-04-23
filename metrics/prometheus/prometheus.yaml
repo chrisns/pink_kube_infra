@@ -1,0 +1,36 @@
+grafana:
+  adminPassword: admin
+  persistence:
+    enabled: true
+    storageClassName: nfs
+    accessModes: 
+      - ReadWriteMany
+  plugins:
+    - farski-blendstat-panel
+    - grafana-clock-panel
+    - snuids-trafficlights-panel
+  # env:
+    # - 
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      ingress.kubernetes.io/secure-backends: "false"
+      ingress.kubernetes.io/backend-protocol: "HTTP"
+    hosts:
+      - metrics.p.cns.me
+  # enabled: false
+prometheus:
+  prometheusSpec:
+    storageSpec: 
+      volumeClaimTemplate:
+        metadata:
+          name: prometheus
+        spec:
+          accessModes:
+            - ReadWriteMany
+          resources:
+            requests:
+              storage: 250Gi
+          storageClassName: nfs
