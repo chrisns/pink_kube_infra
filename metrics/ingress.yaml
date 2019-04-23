@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: metrics
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/secure-backends: "false"
+    ingress.kubernetes.io/backend-protocol: "HTTP"
+
+spec:
+  rules:
+  - host: metrics.p.cns.me
+    http:
+      paths:
+      - backend:
+          serviceName: grafana
+          servicePort: http
