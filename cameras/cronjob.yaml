@@ -1,0 +1,51 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cameras
+spec:
+  schedule: "@hourly"
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cameras
+            image: chrisns/camera-synology-lister-iot
+            env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-iot-creds
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-iot-creds
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: AWS_IOT_ENDPOINT_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: aws-iot-creds
+                  key: AWS_IOT_ENDPOINT_HOST
+            - name: AWS_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: aws-iot-creds
+                  key: AWS_REGION
+            - name: SYNOLOGY_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: cameras
+                  key: SYNOLOGY_HOST
+            - name: SYNOLOGY_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: cameras
+                  key: SYNOLOGY_PASS
+            - name: SYNOLOGY_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cameras
+                  key: SYNOLOGY_USER
+          restartPolicy: OnFailure
