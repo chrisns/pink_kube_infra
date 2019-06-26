@@ -1,9 +1,19 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+bases:
+  - metrics
+  - ble
+  - broadlink
+  - cameras
+  - etcd-backup
+  - magichome
+  - rules_engine
+  - kiam
+
 secretGenerator:
   - name: aws-iot-creds
-    env: aws-iot-creds.txt
+    env: aws-iot-creds.secret.txt
     type: Opaque
 
 generatorOptions:

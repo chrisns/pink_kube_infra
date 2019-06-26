@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - server.yaml
+  - server-rbac.yaml
+  - agent.yaml
+
+secretGenerator:
+  - name: kiam-creds
+    env: env.txt
+    type: Opaque
+  - name: kiam-server-tls
+    namespace: kube-system
+    type: Opaque
+    files:
+      - ca.pem
+      - server.pem 
+      - server-key.pem
+  - name: kiam-agent-tls
+    namespace: kube-system
+    type: Opaque
+    files:
+      - ca.pem
+      - agent.pem 
+      - agent-key.pem
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+namespace: kube-system

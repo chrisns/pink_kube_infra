@@ -1,0 +1,16 @@
+{
+  "CN": "cns Kiam Agent",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "UK",
+      "L": "London",
+      "O": "cns.me",
+      "OU": "cns",
+      "ST": "London"
+    }
+  ]
+}
