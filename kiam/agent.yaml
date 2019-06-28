@@ -35,9 +35,10 @@ spec:
           args:
             - agent
             - --iptables
-            - --host-interface=docker0
+            - --host-interface=!foo
             - --json-log
             - --port=8181
+            - --level=debug
             - --cert=/etc/kiam/tls/agent.pem
             - --key=/etc/kiam/tls/agent-key.pem
             - --ca=/etc/kiam/tls/ca.pem
