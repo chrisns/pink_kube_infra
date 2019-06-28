@@ -16,7 +16,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-      - image: chrisns/iot-broadlink
+      - image: chrisns/iot-broadlink:43631bba11dfe99a1fdf9084cad3da8d0b973869
         name: broadlink-aws-iot
         imagePullPolicy: Always
         env:
