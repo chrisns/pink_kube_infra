@@ -10,12 +10,12 @@ bases:
   - magichome
   - metrics
   - nest
-  - owlet
   - rules_engine
   - solaredge
   - sonos
   - velux
   - traefik
+  - https://github.com/chrisns/k8update
   # - reloader
 
 secretGenerator:
