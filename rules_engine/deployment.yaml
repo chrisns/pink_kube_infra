@@ -15,7 +15,7 @@ spec:
         name: rules-engine
     spec:
       containers:
-      - image: pinked/rules_engine:b3c866aaca33aaeadf58561d632491afef015376
+      - image: chrisns/rules_engine
         name: rules-engine
         imagePullPolicy: Always
         securityContext:
