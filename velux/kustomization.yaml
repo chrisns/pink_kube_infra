@@ -3,7 +3,11 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
-  - secret.yaml
   - deployment.yaml
+
+secretGenerator:
+  - name: velux
+    env: env.txt
+    type: Opaque
 
 namespace: velux
