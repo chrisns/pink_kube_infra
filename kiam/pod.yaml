@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: iam-example
+  annotations:
+    iam.amazonaws.com/permitted: ".*"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aws-cli
+  namespace: iam-example
+  labels:
+    name: aws-cli
+  annotations:
+    iam.amazonaws.com/role: mytest
+spec:
+  hostNetwork: true
+  containers:
+  - image: mesosphere/aws-cli
+    command:
+      - sleep
+      - "100000"
+      # - "aws"
+      # - "s3"
+      # - "ls"
+      # - "pinkzwave"
+    name: aws-cli

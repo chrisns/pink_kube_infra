@@ -28,7 +28,7 @@ spec:
           securityContext:
             capabilities:
               add: ["NET_ADMIN"]
-          image: quay.io/uswitch/kiam:master
+          image: quay.io/uswitch/kiam:v3.3
           imagePullPolicy: Always
           command:
             - /kiam
