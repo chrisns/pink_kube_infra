@@ -8,7 +8,7 @@ spec:
     storage: 10Mi
   storageClassName: acme-nfs
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   nfs:
     server: 192.168.0.3
     path: /volume2/cluster-store/acme
@@ -20,7 +20,7 @@ metadata:
   namespace: kube-system
 spec:
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   storageClassName: acme-nfs
   resources:
     requests:
