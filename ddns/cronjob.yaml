@@ -1,0 +1,27 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: ddns
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 180
+      template:
+        spec:
+          containers:
+            - name: ddns
+              image: curlimages/curl
+              securityContext:
+                runAsUser: 1000
+                runAsGroup: 3000
+              envFrom:
+                - secretRef:
+                    name: secret
+              command: ["/bin/sh"]
+              args:
+                [
+                  "-c",
+                  'curl -v -s -X PUT "https://api.godaddy.com/v1/domains/${MYDOMAIN}/records/A/${MYHOSTNAME}" -H "Authorization: sso-key $GDAPIKEY" -H "Content-Type: application/json" -d "[{\"data\": \"`curl -s https://api.ipify.org`\", \"ttl\":600}]"',
+                ]
+          restartPolicy: OnFailure
