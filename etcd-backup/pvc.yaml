@@ -8,7 +8,7 @@ spec:
     storage: 1Gi
   storageClassName: etcd-backup
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   nfs:
     server: 192.168.0.3
     path: /volume2/cluster-store/etcd-backup
@@ -20,7 +20,7 @@ metadata:
   namespace: kube-system
 spec:
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   storageClassName: etcd-backup
   resources:
     requests:
