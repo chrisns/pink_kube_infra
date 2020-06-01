@@ -2,3 +2,6 @@ env.txt
 *.secret.txt
 *secret.yaml
 secret.yaml
+.gitsecret/keys/random_seed
+!*.secret
+harmony/edb1b6efbe-private.pem.key
