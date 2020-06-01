@@ -11,6 +11,7 @@ bases:
   - metrics
   - nest
   - rules_engine
+  - harmony
   - solaredge
   - sonos
   - velux
