@@ -1,0 +1,18 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: zwave
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/auth-type: basic
+    ingress.kubernetes.io/auth-secret: auth-usa
+
+spec:
+  rules:
+    - host: zwave-usa.p.cns.me
+      http:
+        paths:
+          - backend:
+              serviceName: zwave-usa
+              servicePort: http

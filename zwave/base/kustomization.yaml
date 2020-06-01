@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - pvc.yaml
   - deployment.yaml
+  - service.yaml
 
 secretGenerator:
   - name: zwave

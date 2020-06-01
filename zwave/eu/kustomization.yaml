@@ -1,17 +1,25 @@
 nameSuffix: -eu
 bases:
- - ../base
+  - ../base
 
 secretGenerator:
-- name: zwave
-  behavior: merge
-  namespace: zwave
-  env: env.txt
-  type: Opaque
+  - name: zwave2mqtt
+    files:
+      - settings.json
+  - name: auth
+    files:
+      - auth
+
+commonLabels:
+  zwave: eu
 
 patches:
- - pvc.yaml
- - deployment.yaml
+  - pvc.yaml
+  - deployment.yaml
+  - service.yaml
+
+resources:
+  - ingress.yaml
 
 generatorOptions:
   disableNameSuffixHash: true
