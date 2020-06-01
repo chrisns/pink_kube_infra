@@ -1,0 +1,94 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: snmp
+spec:
+  jobLabel: snmp
+  endpoints:
+    - port: http
+      honorLabels: true
+      path: "/snmp"
+      relabelings:
+        - targetLabel: "instance"
+          replacement: "192.168.0.3"
+        - targetLabel: "pod"
+          replacement: ""
+      params:
+        target:
+          - "192.168.0.3"
+        module:
+          - synology
+
+    - port: http
+      honorLabels: true
+      path: "/snmp"
+      relabelings:
+        - targetLabel: "instance"
+          replacement: "192.168.0.1"
+        - targetLabel: "pod"
+          replacement: ""
+      params:
+        target:
+          - "192.168.0.1"
+        module:
+          - ubiquiti_unifi
+
+    - port: http
+      honorLabels: true
+      path: "/snmp"
+      relabelings:
+        - targetLabel: "instance"
+          replacement: "192.168.9.6"
+        - targetLabel: "pod"
+          replacement: ""
+      params:
+        target:
+          - "192.168.9.6"
+        module:
+          - ubiquiti_unifi
+
+    - port: http
+      honorLabels: true
+      path: "/snmp"
+      relabelings:
+        - targetLabel: "instance"
+          replacement: "192.168.9.7"
+        - targetLabel: "pod"
+          replacement: ""
+      params:
+        target:
+          - "192.168.9.7"
+        module:
+          - ubiquiti_unifi
+
+    - port: http
+      honorLabels: true
+      path: "/snmp"
+      relabelings:
+        - targetLabel: "instance"
+          replacement: "192.168.9.8"
+        - targetLabel: "pod"
+          replacement: ""
+      params:
+        target:
+          - "192.168.9.8"
+        module:
+          - ubiquiti_unifi
+
+    - port: http
+      honorLabels: true
+      path: "/snmp"
+      relabelings:
+        - targetLabel: "instance"
+          replacement: "192.168.9.9"
+        - targetLabel: "pod"
+          replacement: ""
+      params:
+        target:
+          - "192.168.9.9"
+        module:
+          - ubiquiti_unifi
+
+  selector:
+    matchLabels:
+      k8s-app: snmp-exporter

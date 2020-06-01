@@ -1,7 +1,8 @@
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: telegraf
+  namespace: monitoring
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
@@ -15,34 +16,39 @@ spec:
         name: telegraf
     spec:
       containers:
-      - image: telegraf:alpine
-        name: telegraf
-        ports:
-         - name: http-metrics
-           containerPort: 9273
-        volumeMounts:
-        - mountPath: /etc/telegraf/telegraf.conf
-          name: config
-          subPath: telegraf.conf
-          readOnly: true
+        - image: telegraf:alpine
+          name: telegraf
+          resources:
+            limits:
+              memory: 128Mi
+              cpu: 0.1
+          ports:
+            - name: http
+              containerPort: 9273
+          volumeMounts:
+            - mountPath: /etc/telegraf/telegraf.conf
+              name: config
+              subPath: telegraf.conf
+              readOnly: true
 
-        - mountPath: /root/.snmp/mibs
-          name: mibs
-          readOnly: true
+            - mountPath: /root/.snmp/mibs
+              name: mibs
+              readOnly: true
 
-        - mountPath: /etc/telegraf/ca.pem
-          name: secrets
-          subPath: ca.pem
-          readOnly: true
-        - mountPath: /etc/telegraf/cert.pem
-          name: secrets
-          subPath: 04ebb46fc1-certificate.pem.crt
-          readOnly: true
-        - mountPath: /etc/telegraf/key.pem
-          name: secrets
-          subPath: 04ebb46fc1-private.pem.key
-          readOnly: true
+            - mountPath: /etc/telegraf/ca.pem
+              name: secrets
+              subPath: ca.pem
+              readOnly: true
+            - mountPath: /etc/telegraf/cert.pem
+              name: secrets
+              subPath: 04ebb46fc1-certificate.pem.crt
+              readOnly: true
+            - mountPath: /etc/telegraf/key.pem
+              name: secrets
+              subPath: 04ebb46fc1-private.pem.key
+              readOnly: true
       restartPolicy: Always
+      serviceAccountName: telegraf
       volumes:
         - name: config
           configMap:

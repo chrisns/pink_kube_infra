@@ -1,12 +1,14 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
-  name: persisted
+  name: k8s
 spec:
+  retention: 30d
+  # retentionSize: 500GB
   storage:
     volumeClaimTemplate:
       spec:
-        storageClassName: ssd
+        storageClassName: nfs
         resources:
           requests:
-            storage: 40Gi
+            storage: 100Gi

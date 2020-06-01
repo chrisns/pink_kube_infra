@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: snmp-exporter
+  labels:
+    k8s-app: snmp-exporter
+spec:
+  ports:
+    - name: http
+      port: 9116
+      protocol: TCP
+  selector:
+    name: snmp-exporter

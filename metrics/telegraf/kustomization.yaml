@@ -1,0 +1,46 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yaml
+  - prometheus.yaml
+  - serviceaccount.yaml
+  - service.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: telegraf
+    namespace: metrics
+    files:
+      - telegraf.conf
+  - name: telegraf-mibs
+    namespace: metrics
+    files:
+      - MIBS/FROGFOOT-RESOURCES-MIB
+      - MIBS/UBNT-MIB
+      - MIBS/UBNT-UniFi-MIB
+      - MIBS/SYNOLOGY-COREDUMPS-MIB.txt
+      - MIBS/SYNOLOGY-DISK-MIB.txt
+      - MIBS/SYNOLOGY-EBOX-MIB.txt
+      - MIBS/SYNOLOGY-FLASHCACHE-MIB.txt
+      - MIBS/SYNOLOGY-ISCSILUN-MIB.txt
+      - MIBS/SYNOLOGY-NFS-MIB.txt
+      - MIBS/SYNOLOGY-RAID-MIB.txt
+      - MIBS/SYNOLOGY-SERVICES-MIB.txt
+      - MIBS/SYNOLOGY-SMART-MIB.txt
+      - MIBS/SYNOLOGY-SPACEIO-MIB.txt
+      - MIBS/SYNOLOGY-STORAGEIO-MIB.txt
+      - MIBS/SYNOLOGY-SYSTEM-MIB.txt
+      - MIBS/SYNOLOGY-UPS-MIB.txt
+
+secretGenerator:
+  - name: telegraf
+    namespace: metrics
+    files:
+      - ca.pem
+      - 04ebb46fc1-certificate.pem.crt
+      - 04ebb46fc1-private.pem.key
+
+namespace: monitoring

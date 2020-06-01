@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snmp-exporter
+  labels:
+    k8s-app: snmp-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: snmp-exporter
+  template:
+    metadata:
+      labels:
+        name: snmp-exporter
+        k8s-app: snmp-exporter
+    spec:
+      containers:
+        - name: snmp-exporter
+          image: prom/snmp-exporter
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            readOnlyRootFilesystem: true
+          args:
+            - "--log.level=debug"
+            - "--config.file=/etc/snmp_exporter/snmp.yml"
+          resources:
+            limits:
+              memory: 32Mi
+              cpu: 0.4
+          ports:
+            - containerPort: 9116
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http

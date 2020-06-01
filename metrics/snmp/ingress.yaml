@@ -1,8 +1,8 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: drone
-  namespace: drone
+  name: snmp-exporter
+  namespace: monitoring
   annotations:
     kubernetes.io/ingress.class: traefik
     ingress.kubernetes.io/secure-backends: "false"
@@ -10,9 +10,9 @@ metadata:
 
 spec:
   rules:
-  - host: drone.p.cns.me
-    http:
-      paths:
-      - backend:
-          serviceName: drone
-          servicePort: 80
+    - host: snmp.p.cns.me
+      http:
+        paths:
+          - backend:
+              serviceName: snmp-exporter
+              servicePort: http
