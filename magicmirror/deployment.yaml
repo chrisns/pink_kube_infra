@@ -1,5 +1,5 @@
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: magicmirror
   labels:
@@ -14,46 +14,52 @@ spec:
       labels:
         name: magicmirror
     spec:
-      containers:      
-      - image: pinked/magicmirror:bac9eca80c8fb5958f047973aad27486f8b3dd35
-        name: magicmirror
-        securityContext:
-          runAsUser: 100
-          readOnlyRootFilesystem: true
-        resources:
-          limits:
-            memory: 12Mi
-            cpu: 0.01
-        ports:
-         - name: http
-           containerPort: 8080
-        env:
-          - name: MQTT_USER
-            valueFrom:
-              secretKeyRef:
-                name: magicmirror-creds
-                key: AWS_ACCESS_KEY_ID
-          - name: MQTT_PASS
-            valueFrom:
-              secretKeyRef:
-                name: magicmirror-creds
-                key: AWS_SECRET_ACCESS_KEY
-          - name: MQTT_HOST
-            valueFrom:
-              secretKeyRef:
-                name: magicmirror-creds
-                key: AWS_IOT_ENDPOINT_HOST
-          - name: REGION
-            valueFrom:
-              secretKeyRef:
-                name: magicmirror-creds
-                key: AWS_REGION
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
+      containers:
+        - image: chrisns/magicmirror:latest
+          name: magicmirror
+          securityContext:
+            runAsUser: 100
+            readOnlyRootFilesystem: true
+          resources:
+            limits:
+              memory: 12Mi
+              cpu: 0.01
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - mountPath: /var/cache/nginx
+              name: cache
+          env:
+            - name: MQTT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: magicmirror-creds
+                  key: AWS_ACCESS_KEY_ID
+            - name: MQTT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: magicmirror-creds
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: MQTT_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: magicmirror-creds
+                  key: AWS_IOT_ENDPOINT_HOST
+            - name: REGION
+              valueFrom:
+                secretKeyRef:
+                  name: magicmirror-creds
+                  key: AWS_REGION
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
       restartPolicy: Always
+      volumes:
+        - name: cache
+          emptyDir: {}
