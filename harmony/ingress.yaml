@@ -1,0 +1,14 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: harmonyapi
+
+spec:
+  rules:
+    - host: harmony-api.p.cns.me
+      http:
+        paths:
+          - backend:
+              serviceName: harmonyapi
+              servicePort: http
