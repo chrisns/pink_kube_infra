@@ -1,14 +1,18 @@
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: zwave
 spec:
   template:
     spec:
       containers:
-      - name: zwave
-        env:
-          - name: BUCKET_KEY
-            value: pink_eu
+        - name: zwave
+          env:
+            - name: BUCKET_KEY
+              value: pink_eu
       nodeSelector:
-        kubernetes.io/hostname: stick1
+        kubernetes.io/hostname: stick2
+      volumes:
+        - name: config
+          secret:
+            secretName: zwave2mqtt-eu

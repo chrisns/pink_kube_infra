@@ -1,5 +1,5 @@
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: zwave
 spec:
@@ -15,24 +15,40 @@ spec:
         iam.amazonaws.com/role: IoTZwave
     spec:
       containers:
-        - image: chrisns/iot-zwave
-          name: zwave
-          # command:
-          #   - sh
-          #   - -c
-          #   - "`wget -qO- https://gist.githubusercontent.com/chrisns/4b732c4b2f85272aef6706d43e7063f8/raw/getiamcreds.js | node` && node index.js"
+        - name: zwave
+          image: chrisns/iot-zwave:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8091
+            - name: telnet
+              containerPort: 8888
           resources:
             limits:
-              # cpu: 200m
+              cpu: "1"
               memory: 512Mi
             requests:
-              # cpu: 100m
+              cpu: "1"
               memory: 400Mi
           volumeMounts:
             - mountPath: /dev/ttyUSB1
               name: zwavestick
-            - mountPath: /data
+            - mountPath: /usr/src/app/store
               name: data
+            - mountPath: /usr/src/app/store/settings.json
+              subPath: settings.json
+              name: config
+              readOnly: true
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health/zwave
+          #     port: http
+          #     httpHeaders:
+          #       - name: Accept
+          #         value: text/plain
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 3
+          #   failureThreshold: 10
           securityContext:
             allowPrivilegeEscalation: true
             privileged: true
@@ -40,7 +56,7 @@ spec:
             - name: DEVICE
               value: /dev/ttyUSB1
             - name: DEBUG
-              value: "true"
+              value: ""
           envFrom:
             - secretRef:
                 name: zwave
