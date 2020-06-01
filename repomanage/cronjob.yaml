@@ -1,0 +1,29 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: repomanage
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: repomanage
+            image: chrisns/repomanage
+            env:
+            - name: TOPIC
+              value: cdpmanagedrepo
+            - name: ORG
+              value: UKHomeOffice
+            - name: TEAMNAME
+              value: cdp
+            - name: ADMIN_TEAM
+              value: cdp_admin
+            - name: GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: repomanage
+                  key: GITHUB_TOKEN
+          restartPolicy: Never
