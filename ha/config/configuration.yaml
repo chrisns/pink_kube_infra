@@ -1,0 +1,93 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+# default_config:
+frontend:
+mobile_app:
+person:
+config:
+
+http:
+  base_url: https://ha.e.cns.me:443
+
+# history:
+# logbook:
+# map:
+# script:
+# ssdp:
+# sun:
+system_health:
+# updater:
+# zeroconf:
+
+homeassistant:
+  name: Le Chateau Pink
+  unit_system: metric
+
+  auth_providers:
+    - type: homeassistant
+
+group: !include groups.yaml
+automation: !include automations.yaml
+# script: !include scripts.yaml
+ios: !include ios.yaml
+camera: !include camera.yaml
+# lovelace:
+# mode: yaml
+logger:
+  default: debug
+
+mqtt:
+  broker: !env_var AWS_IOT_HOST
+  certificate: /secrets/AmazonRootCA1.pem
+  client_key: /secrets/5ba2c763c3-private.pem.key
+  client_cert: /secrets/5ba2c763c3-certificate.pem.crt
+  port: 8883
+  tls_version: "1.2"
+  tls_insecure: false
+
+binary_sensor:
+  - platform: mqtt
+    name: doorbell
+    device_class: presence
+    state_topic: "$aws/things/zwave_f2e55e6c_58/shadow/update/accepted"
+    value_template: "{{value_json['state']['reported']['user']['Home Security'] == 'Tampering -  Cover Removed' }}"
+
+lock:
+  - name: Front Door
+    platform: mqtt
+    command_topic: "$aws/things/zwave_f2e55e6c_49/shadow/update"
+    state_topic: "$aws/things/zwave_f2e55e6c_49/shadow/update/accepted"
+    value_template: '{"state": {"desired":{"user": {"Locked": true}}}}'
+    payload_unlock: '{"state": {"desired":{"user": {"Locked": false}}}}'
+    payload_lock: '{"state": {"desired":{"user": {"Locked": true}}}}'
+
+light:
+  - name: Desk
+    platform: mqtt
+    command_topic: "$aws/things/zwave_f2e55e6c_15/shadow/update"
+    state_topic: "$aws/things/zwave_f2e55e6c_15/shadow/update/documents"
+    state_value_template: '{% if value_json["current"]["state"]["reported"]["user"]["Switch-1"] %} {"state": {"desired":{"user": {"Switch-1": true}}}} {% else %} {"state": {"desired":{"user": {"Switch-1": false}}}} {% endif %}'
+    payload_off: '{"state": {"desired":{"user": {"Switch-1": false}}}}'
+    payload_on: '{"state": {"desired":{"user": {"Switch-1": true}}}}'
+
+  - name: Lounge
+    platform: mqtt
+    command_topic: "$aws/things/zwave_f2e55e6c_15/shadow/update"
+    state_topic: "$aws/things/zwave_f2e55e6c_15/shadow/update/documents"
+    state_value_template: '{% if value_json["current"]["state"]["reported"]["user"]["Switch"] %} {"state": {"desired":{"user": {"Switch": true}}}} {% else %} {"state": {"desired":{"user": {"Switch": false}}}} {% endif %}'
+    payload_off: '{"state": {"desired":{"user": {"Switch": false}}}}'
+    payload_on: '{"state": {"desired":{"user": {"Switch": true}}}}'
+
+  # - name: Flowers
+  #   platform: mqtt
+  #   brightness_command_topic: "$aws/things/zwave_f2e55e6c_42/shadow/update"
+  #   json_attributes_topic: "$aws/things/zwave_f2e55e6c_42/shadow/update/documents"
+  #   json_attributes_template: '{% if value_json["current"]["state"]["reported"]["user"]["Switch"] %} {"state": {"desired":{"user": {"Switch": true}}}} {% else %} {"state": {"desired":{"user": {"Switch": false}}}} {% endif %}'
+  #   # payload_off: '{"state": {"desired":{"user": {"Switch": false}}}}'
+  #   # payload_on: '{"state": {"desired":{"user": {"Switch": true}}}}'
+
+notify:
+  - platform: html5
+    name: !env_var HTML5_NAME
+    vapid_pub_key: !env_var HTML5_PUBLIC_KEY
+    vapid_prv_key: !env_var HTML5_PRIVATE_KEY
+    vapid_email: !env_var HTML5_EMAIL

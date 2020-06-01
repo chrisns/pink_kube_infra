@@ -1,0 +1,20 @@
+title: My Awesome Home
+views:
+    # View tab title.
+  - title: Example
+    cards:
+        # The markdown card will render markdown text.
+      - type: entity-button
+        name: Turn Off Lights
+        tap_action:
+          action: call-service
+          service: notify.ios_cns_iphone
+          service_data:
+            message: "fooa"
+            data:
+              attachment:
+                content-type: jpeg
+              push:
+                category: doorbell
+              entity_id: camera.external_porch
+        entity:  person.chris

@@ -1,0 +1,5 @@
+lounge:
+  name: Lounge
+  entities:
+    - light.Desk
+    - light.Lounge

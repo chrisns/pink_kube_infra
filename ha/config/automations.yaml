@@ -1,0 +1,50 @@
+- alias: Doorbell Notify
+  initial_state: true
+  hide_entity: true
+  trigger:
+    platform: state
+    entity_id: binary_sensor.doorbell
+    to: "on"
+  action:
+    - service: notify.ios_cns_iphone
+      data_template:
+        title: "Doorbell"
+        message: "Doorbell"
+        data:
+          attachment:
+            content-type: jpeg
+          push:
+            category: camera
+          entity_id: camera.external_porch
+    - service: notify.le_chateau_pink
+      data_template:
+        message: Doorbell
+        data:
+          requireInteraction: true
+          renotify: 1
+          actions:
+            - action: open
+              # icon: "/static/icons/favicon-192x192.png"
+              title: Open Home Assistant
+            - action: open_door
+              title: Open door
+    - service: notify.ios_cns_iphone
+      data_template:
+        title: "Doorbell"
+        message: "Doorbell"
+        data:
+          attachment:
+            content-type: jpeg
+          push:
+            category: camera
+          entity_id: camera.external_front
+
+- alias: iOS app notification unlock front door
+  initial_state: true
+  hide_entity: true
+  trigger:
+    platform: event
+    event_type: ios.unlock_front_door
+  action:
+    - service: lock.unlock
+      entity_id: lock.front_door

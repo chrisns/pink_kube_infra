@@ -1,0 +1,35 @@
+push:
+  categories:
+    - name: camera
+      identifier: 'camera'
+      actions:
+        - identifier: 'unlock_front_door'
+          title: 'Unlock Front Door'
+          activationMode: 'background'
+          authenticationRequired: false
+          destructive: true
+          behavior: 'default'
+# push:
+#     categories:
+#       - name: doorbell
+#         identifier: 'doorbell'
+#         actions:
+#           - identifier: 'TEST'
+#             title: 'Testbutton 1'
+# push:
+#   categories:
+#     - name: Lamps Off
+#       identifier: 'doorbell'
+#       actions:
+#         - identifier: 'LAMPS_OFF'
+#           title: 'Lamps Off'
+#           activationMode: 'background'
+#           authenticationRequired: yes
+#           destructive: yes
+#           behavior: 'default'
+#         - identifier: 'DISMISS'
+#           title: 'Dismiss'
+#           activationMode: 'background'
+#           authenticationRequired: yes
+#           destructive: no
+#           behavior: 'default'

@@ -1,0 +1,16 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: homeassistant-remote
+  annotations:
+    kubernetes.io/ingress.class: traefik-remote
+
+spec:
+  rules:
+  - host: ha.e.cns.me
+    http:
+      paths:
+      - backend:
+          serviceName: homeassistant
+          servicePort: http

@@ -1,0 +1,5 @@
+- platform: synology
+  url: !env_var SYNOLOGY_HOST
+  username: !env_var SYNOLOGY_USER
+  password: !env_var SYNOLOGY_PASS
+  timeout: 60
