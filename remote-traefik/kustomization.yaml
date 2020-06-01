@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - service.yaml
+  - traefik-ingress-ds.yaml
+  - sshbridge-deployment.yaml
+  - traefik-pvc.yaml
+
+configMapGenerator:
+  - name: traefik-remote-config
+    files:
+      - traefik.toml
+
+secretGenerator:
+  - name: traefik-remote-bridge-key
+    type: Opaque
+    files:
+      - bridge-key
+
+namespace: kube-system

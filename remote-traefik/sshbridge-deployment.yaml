@@ -1,0 +1,46 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: ssh-bridge
+  labels:
+    name: ssh-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: ssh-bridge
+  template:
+    metadata:
+      labels:
+        name: ssh-bridge
+    spec:
+      # securityContext:
+      # runAsUser: 1000
+      # runAsGroup: 3000
+      # fsGroup: 2000
+      containers:
+        - image: kroniak/ssh-client
+          name: ssh-client
+          # securityContext:
+          # allowPrivilegeEscalation: false
+          command:
+            - ssh
+            - bridge@35.189.89.123
+            - -i
+            - /keys/bridge-key
+            - -o
+            - StrictHostKeyChecking=no
+            - -R
+            - 8443:traefik-ingress-remote:443
+            - -N
+            - -v
+          volumeMounts:
+            - name: keys
+              mountPath: /keys
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: keys
+          secret:
+            defaultMode: 0600
+            secretName: traefik-remote-bridge-key
