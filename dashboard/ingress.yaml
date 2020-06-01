@@ -1,0 +1,16 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kubernetes-dashboard
+  annotations:
+    ingress.kubernetes.io/auth-tls-insecure: "true"
+
+spec:
+  rules:
+    - host: dashboard.p.cns.me
+      http:
+        paths:
+          - backend:
+              serviceName: kubernetes-dashboard
+              servicePort: 443
