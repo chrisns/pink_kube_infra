@@ -1,5 +1,5 @@
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: nest-aws-iot
   labels:
@@ -17,35 +17,35 @@ spec:
         iam.amazonaws.com/role: IoTDataAccess
     spec:
       containers:
-      - image: chrisns/nest-aws-iot
-        command:
-          - sh
-          - -c
-          - "`wget -qO- https://gist.githubusercontent.com/chrisns/4b732c4b2f85272aef6706d43e7063f8/raw/getiamcreds.js | node` && node index.js"
-        name: nest-aws-iot
-        imagePullPolicy: Always
-        env:
-          - name: ACCESS_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: nest
-                key: ACCESS_TOKEN
-          - name: DEVICE_ID
-            valueFrom:
-              secretKeyRef:
-                name: nest
-                key: DEVICE_ID
-          - name: AWS_IOT_ENDPOINT_HOST
-            value: a1o5j7svq7l99k.iot.eu-west-2.amazonaws.com
-          - name: AWS_REGION
-            value: eu-west-2
-        # livenessProbe:
-        #   httpGet:
-        #     path: /ping
-        #     port: 80
-        #   initialDelaySeconds: 3
-        #   periodSeconds: 3
-        #   timeoutSeconds: 1
+        - image: chrisns/nest-aws-iot
+          command:
+            - sh
+            - -c
+            - "`wget -qO- https://gist.githubusercontent.com/chrisns/4b732c4b2f85272aef6706d43e7063f8/raw/getiamcreds.js | node` && node index.js"
+          name: nest-aws-iot
+          imagePullPolicy: Always
+          env:
+            - name: ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: nest
+                  key: ACCESS_TOKEN
+            - name: USER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: nest
+                  key: USER_ID
+            - name: AWS_IOT_ENDPOINT_HOST
+              value: a1o5j7svq7l99k.iot.eu-west-2.amazonaws.com
+            - name: AWS_REGION
+              value: eu-west-2
+          # livenessProbe:
+          #   httpGet:
+          #     path: /ping
+          #     port: 80
+          #   initialDelaySeconds: 3
+          #   periodSeconds: 3
+          #   timeoutSeconds: 1
       # affinity:
       #   podAntiAffinity:
       #     preferredDuringSchedulingIgnoredDuringExecution:
