@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - external_driveway
+  - external_front
+  - external_back
+  - external_garden
+  - external_porch
+
+resources:
+  - namespace.yaml
+
+namespace: webrtc

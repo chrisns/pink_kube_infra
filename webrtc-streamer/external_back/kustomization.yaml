@@ -1,0 +1,16 @@
+nameSuffix: -back
+bases:
+  - ../base
+
+secretGenerator:
+  - name: webrtc
+    behavior: merge
+    env: env.txt
+
+patchesJson6902:
+  - target:
+      group: extensions
+      version: v1beta1
+      kind: Ingress
+      name: webrtc
+    path: ingress_patch.yaml

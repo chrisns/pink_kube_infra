@@ -1,0 +1,63 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: webrtc
+  labels:
+    name: webrtc
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      name: webrtc
+  template:
+    metadata:
+      labels:
+        name: webrtc
+    spec:
+      containers:
+        - image: datarhei/restreamer:latest
+          name: webrtc
+          command:
+            - "sh"
+            - "-c"
+            - cat /v1.json  | sed "s#_SRC_#$SRC#g" | sed "s#_OUT_#$OUT#g" > /restreamer/db/v1.json && ./run.sh
+            # - "cp /v1.json /restreamer/db && ./run.sh"
+          resources:
+            limits:
+              memory: 128Mi
+              cpu: "1"
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: webrtc
+          env:
+            - name: RS_USERNAME
+              value: admin
+            - name: RS_PASSWORD
+              value: admin
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          volumeMounts:
+            - mountPath: /v1.json
+              name: config
+              subPath: config.json
+              readOnly: true
+            - mountPath: /restreamer/db
+              name: db
+      restartPolicy: Always
+      volumes:
+        - name: db
+          emptyDir: {}
+        - name: config
+          secret:
+            secretName: webrtc-config
