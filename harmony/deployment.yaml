@@ -1,0 +1,39 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: harmonyapi
+  labels:
+    name: harmonyapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: harmonyapi
+  template:
+    metadata:
+      labels:
+        name: harmonyapi
+    spec:
+      containers:
+        - image: chrisns/harmony-api
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: 1000m
+          name: harmonyapi
+          volumeMounts:
+            - mountPath: /config
+              name: config
+              readOnly: true
+          ports:
+            - name: http
+              containerPort: 8282
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+      restartPolicy: Always
+      volumes:
+        - name: config
+          secret:
+            secretName: config
