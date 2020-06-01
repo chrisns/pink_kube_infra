@@ -1,0 +1,14 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pink01
+
+spec:
+  rules:
+    - host: pink01-greengrass.p.cns.me
+      http:
+        paths:
+          - backend:
+              serviceName: pink01
+              servicePort: http

@@ -1,0 +1,46 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: pink01
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pink01
+  template:
+    metadata:
+      labels:
+        name: pink01
+    spec:
+      containers:
+        - image: amazon/aws-iot-greengrass:latest
+          name: pink01
+          command:
+            - /greengrass-entrypoint.sh
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          ports:
+            - name: mqtt
+              containerPort: 8883
+            - name: http
+              containerPort: 8443
+
+          volumeMounts:
+            - mountPath: /greengrass/certs
+              name: certs
+              readOnly: true
+
+            - mountPath: /greengrass/config
+              name: config
+              readOnly: true
+
+      restartPolicy: Always
+      volumes:
+        - name: config
+          configMap:
+            name: config
+        - name: certs
+          secret:
+            secretName: certs
