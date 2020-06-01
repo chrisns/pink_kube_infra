@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: hdamhub
+  labels:
+    name: hdamhub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hdamhub
+  template:
+    metadata:
+      labels:
+        name: hdamhub
+      annotations:
+        iam.amazonaws.com/role: IoTDataAccess
+    spec:
+      containers:
+        - image: chrisns/iot_hdamhub
+          resources:
+            limits:
+              memory: 32Mi
+              cpu: 0.1
+          name: hdamhub
+          command:
+            - sh
+            - -c
+            - "`wget -qO- https://gist.githubusercontent.com/chrisns/4b732c4b2f85272aef6706d43e7063f8/raw/getiamcreds.js | node` && node index.js"
+          imagePullPolicy: Always
+          env:
+            - name: HDA_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: hdamhub
+                  key: HDA_ADDRESS
+            - name: AWS_IOT_ENDPOINT_HOST
+              value: a1o5j7svq7l99k.iot.eu-west-2.amazonaws.com
+            - name: AWS_REGION
+              value: eu-west-2
+      restartPolicy: Always
